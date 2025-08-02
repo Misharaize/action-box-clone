@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { VideoPlayer } from "@/components/VideoPlayer";
 import { MovieGrid } from "@/components/MovieGrid";
+import { WatchProviders } from "@/components/WatchProviders";
 import { tmdbService, type MovieDetails, type Movie } from "@/services/tmdbApi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
@@ -287,6 +288,11 @@ export default function MovieDetailsPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Watch Providers Section */}
+      <div className="container mx-auto px-4 py-12">
+        <WatchProviders movieId={movie.id} movieTitle={movie.title} />
       </div>
 
       {/* Similar Movies */}

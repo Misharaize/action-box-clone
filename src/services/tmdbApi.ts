@@ -4,6 +4,9 @@ import axios from 'axios';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const TMDB_API_KEY = 'abb21a3ce070b9a0aadc09555088d5d8';
 
+// JustWatch API configuration
+const JUSTWATCH_BASE_URL = 'https://apis.justwatch.com/content/titles';
+
 const tmdbApi = axios.create({
   baseURL: TMDB_BASE_URL,
   params: {
@@ -47,6 +50,20 @@ export interface TMDBResponse<T> {
   results: T[];
   total_pages: number;
   total_results: number;
+}
+
+export interface WatchProvider {
+  id: number;
+  name: string;
+  logo_path: string;
+  display_priority: number;
+}
+
+export interface StreamingInfo {
+  buy?: WatchProvider[];
+  rent?: WatchProvider[];
+  flatrate?: WatchProvider[];
+  link?: string;
 }
 
 export const tmdbService = {
@@ -130,6 +147,23 @@ export const tmdbService = {
   getMovieRecommendations: async (movieId: number, page = 1): Promise<TMDBResponse<Movie>> => {
     const response = await tmdbApi.get(`/movie/${movieId}/recommendations`, { params: { page } });
     return response.data;
+  },
+
+  // Get watch providers (where to watch)
+  getWatchProviders: async (movieId: number): Promise<StreamingInfo> => {
+    try {
+      const response = await tmdbApi.get(`/movie/${movieId}/watch/providers`);
+      const usProviders = response.data.results?.US;
+      return {
+        flatrate: usProviders?.flatrate || [],
+        rent: usProviders?.rent || [],
+        buy: usProviders?.buy || [],
+        link: usProviders?.link
+      };
+    } catch (error) {
+      console.error('Error fetching watch providers:', error);
+      return {};
+    }
   },
 };
 
