@@ -55,21 +55,7 @@ const Index = () => {
 
   const handleSearch = async (query: string) => {
     if (query.trim()) {
-      try {
-        const results = await tmdbService.searchMovies(query);
-        // You could navigate to a search results page or show results in a modal
-        console.log("Search results:", results);
-        toast({
-          title: "Search",
-          description: `Found ${results.total_results} results for "${query}"`,
-        });
-      } catch (error) {
-        toast({
-          title: "Search Error",
-          description: "Failed to search movies",
-          variant: "destructive",
-        });
-      }
+      navigate(`/search?q=${encodeURIComponent(query)}`);
     }
   };
 

@@ -3,6 +3,7 @@ import { Search, Menu, User, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
@@ -12,6 +13,8 @@ interface HeaderProps {
 export const Header = ({ onSearch, className }: HeaderProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +28,7 @@ export const Header = ({ onSearch, className }: HeaderProps) => {
     )}>
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
           <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
             <Play className="w-5 h-5 text-primary-foreground" />
           </div>
@@ -36,10 +39,30 @@ export const Header = ({ onSearch, className }: HeaderProps) => {
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          <a href="/" className="text-foreground hover:text-primary transition-colors">Home</a>
-          <a href="/movies" className="text-muted-foreground hover:text-primary transition-colors">Movies</a>
-          <a href="/series" className="text-muted-foreground hover:text-primary transition-colors">TV Series</a>
-          <a href="/trending" className="text-muted-foreground hover:text-primary transition-colors">Trending</a>
+          <button 
+            onClick={() => navigate('/')} 
+            className={cn("transition-colors", location.pathname === '/' ? "text-primary" : "text-muted-foreground hover:text-primary")}
+          >
+            Home
+          </button>
+          <button 
+            onClick={() => navigate('/popular')} 
+            className={cn("transition-colors", location.pathname === '/popular' ? "text-primary" : "text-muted-foreground hover:text-primary")}
+          >
+            Popular
+          </button>
+          <button 
+            onClick={() => navigate('/trending')} 
+            className={cn("transition-colors", location.pathname === '/trending' ? "text-primary" : "text-muted-foreground hover:text-primary")}
+          >
+            Trending
+          </button>
+          <button 
+            onClick={() => navigate('/genres')} 
+            className={cn("transition-colors", location.pathname === '/genres' ? "text-primary" : "text-muted-foreground hover:text-primary")}
+          >
+            Genres
+          </button>
         </nav>
 
         {/* Search & User Actions */}
@@ -80,10 +103,30 @@ export const Header = ({ onSearch, className }: HeaderProps) => {
       {isMenuOpen && (
         <div className="md:hidden bg-card border-t border-border/20 p-4">
           <nav className="flex flex-col gap-4">
-            <a href="/" className="text-foreground hover:text-primary transition-colors">Home</a>
-            <a href="/movies" className="text-muted-foreground hover:text-primary transition-colors">Movies</a>
-            <a href="/series" className="text-muted-foreground hover:text-primary transition-colors">TV Series</a>
-            <a href="/trending" className="text-muted-foreground hover:text-primary transition-colors">Trending</a>
+            <button 
+              onClick={() => { navigate('/'); setIsMenuOpen(false); }} 
+              className={cn("text-left transition-colors", location.pathname === '/' ? "text-primary" : "text-muted-foreground hover:text-primary")}
+            >
+              Home
+            </button>
+            <button 
+              onClick={() => { navigate('/popular'); setIsMenuOpen(false); }} 
+              className={cn("text-left transition-colors", location.pathname === '/popular' ? "text-primary" : "text-muted-foreground hover:text-primary")}
+            >
+              Popular
+            </button>
+            <button 
+              onClick={() => { navigate('/trending'); setIsMenuOpen(false); }} 
+              className={cn("text-left transition-colors", location.pathname === '/trending' ? "text-primary" : "text-muted-foreground hover:text-primary")}
+            >
+              Trending
+            </button>
+            <button 
+              onClick={() => { navigate('/genres'); setIsMenuOpen(false); }} 
+              className={cn("text-left transition-colors", location.pathname === '/genres' ? "text-primary" : "text-muted-foreground hover:text-primary")}
+            >
+              Genres
+            </button>
           </nav>
           <form onSubmit={handleSearch} className="mt-4 flex gap-2">
             <Input
